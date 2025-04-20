@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Utility Kit</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #1e003a, #1a1f60);
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      transition: background 0.5s;
+      background-size: 400% 400%;
+      animation: gradientBackground 10s ease infinite;
+    }
+    @keyframes gradientBackground {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #4a00e0;
+      text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.8);
+      transition: color 0.3s ease;
+    }
+    h1:hover {
+      color: #ff00ff;
+      text-shadow: 0px 0px 20px rgba(255, 0, 255, 1);
+    }
+    .tool {
+      background-color: #2a2e5b;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .tool:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+    }
+    label, button {
+      display: block;
+      margin: 0.5rem 0;
+    }
+    input, select, button, textarea {
+      width: 100%;
+      padding: 0.7rem;
+      border-radius: 10px;
+      border: none;
+      font-size: 1rem;
+    }
+    button {
+      background-color: #4a00e0;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #ff00ff;
+    }
+    canvas {
+      margin-top: 1.5rem;
+    }
+    input, select {
+      background-color: #333;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <h1>Utility Kit</h1>
+
+  <!-- IP Checker -->
+  <div class="tool">
+    <h2>🌐 IP Checker</h2>
+    <button onclick="getIP()">Check My IP</button>
+    <p id="ipResult"></p>
+  </div>
+
+  <!-- QR Code Generator -->
+  <div class="tool">
+    <h2>🔳 QR Code Generator</h2>
+    <input type="text" id="qrText" placeholder="Enter text or link" />
+    <button onclick="generateQR()">Generate QR Code</button>
+    <canvas id="qrCanvas"></canvas>
+  </div>
+
+  <!-- Password Generator -->
+  <div class="tool">
+    <h2>🔐 Password Generator</h2>
+    <button onclick="generatePassword()">Generate Strong Password</button>
+    <p id="passwordResult"></p>
+  </div>
+
+  <!-- Unit Converter -->
+  <div class="tool">
+    <h2>🔄 Unit Converter (MB/GB)</h2>
+    <input type="number" id="unitInput" placeholder="Enter value" />
+    <select id="unitType">
+      <option value="mbToGb">MB to GB</option>
+      <option value="gbToMb">GB to MB</option>
+    </select>
+    <button onclick="convertUnits()">Convert</button>
+    <p id="unitResult"></p>
+  </div>
+
+  <!-- Currency Converter -->
+  <div class="tool">
+    <h2>💵 Currency Converter (USD)</h2>
+    <input type="number" id="currencyInput" placeholder="Enter USD value" />
+    <select id="currencyType">
+      <option value="eur">EUR</option>
+      <option value="gbp">GBP</option>
+      <option value="inr">INR</option>
+    </select>
+    <button onclick="convertCurrency()">Convert</button>
+    <p id="currencyResult"></p>
+  </div>
+
+  <!-- Weather Checker -->
+  <div class="tool">
+    <h2>🌤 Weather Checker</h2>
+    <input type="text" id="cityName" placeholder="Enter city name" />
+    <button onclick="getWeather()">Check Weather</button>
+    <p id="weatherResult"></p>
+  </div>
+
+  <!-- Date/Time Converter -->
+  <div class="tool">
+    <h2>🕰 Date/Time Converter</h2>
+    <input type="datetime-local" id="dateTimeInput" />
+    <select id="timeZone">
+      <option value="UTC">UTC</option>
+      <option value="IST">IST</option>
+      <option value="GMT">GMT</option>
+    </select>
+    <button onclick="convertDateTime()">Convert</button>
+    <p id="dateTimeResult"></p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+  <script>
+    function getIP() {
+      fetch('https://api.ipify.org?format=json')
+        .then(res => res.json())
+        .then(data => document.getElementById('ipResult').innerText = `Your IP: ${data.ip}`)
+        .catch(err => console.error(err));
+    }
+
+    function generateQR() {
+      const qr = new QRious({
+        element: document.getElementById('qrCanvas'),
+        value: document.getElementById('qrText').value,
+        size: 200,
+      });
+    }
+
+    function generatePassword() {
+      const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+      let password = "";
+      for (let i = 0; i < 12; i++) {
+        const rand = Math.floor(Math.random() * charset.length);
+        password += charset[rand];
+      }
+      document.getElementById('passwordResult').innerText = password;
+    }
+
+    function convertUnits() {
+      const value = parseFloat(document.getElementById('unitInput').value);
+      const type = document.getElementById('unitType').value;
+      let result;
+      if (type === 'mbToGb') {
+        result = `${value} MB = ${(value / 1024).toFixed(2)} GB`;
+      } else {
+        result = `${value} GB = ${(value * 1024).toFixed(2)} MB`;
+      }
+      document.getElementById('unitResult').innerText = result;
+    }
+
+    function convertCurrency() {
+      const value = parseFloat(document.getElementById('currencyInput').value);
+      const currency = document.getElementById('currencyType').value;
+      const rates = {
+        eur: 0.84,
+        gbp: 0.74,
+        inr: 74.89,
+      };
+      const converted = (value * rates[currency]).toFixed(2);
+      document.getElementById('currencyResult').innerText = `Converted Value: ${converted} ${currency.toUpperCase()}`;
+    }
+
+    function getWeather() {
+      const city = document.getElementById('cityName').value;
+      const apiKey = 'YOUR_OPENWEATHERMAP_API_KEY';
+      fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`)
+        .then(res => res.json())
+        .then(data => document.getElementById('weatherResult').innerText = `Weather: ${data.weather[0].description}, Temp: ${Math.round(data.main.temp - 273.15)}°C`)
+        .catch(err => console.error(err));
+    }
+
+    function convertDateTime() {
+      const date = new Date(document.getElementById('dateTimeInput').value);
+      const timeZone = document.getElementById('timeZone').value;
+      const options = { timeZone, hour: '2-digit', minute: '2-digit', second: '2-digit' };
+      const time = new Intl.DateTimeFormat('en-US', options).format(date);
+      document.getElementById('dateTimeResult').innerText = `Converted Time: ${time}`;
+    }
+  </script>
+</body>
+</html>
